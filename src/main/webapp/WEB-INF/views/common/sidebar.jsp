@@ -70,9 +70,10 @@
             <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-sign-in-alt me-2"></i>인증</a>
                 <div class="dropdown-menu bg-transparent border-0">
-                    <a href="${pageContext.request.contextPath}/login.do" class="dropdown-item">로그인</a>
-                    <a href="${pageContext.request.contextPath}/logout.do" class="dropdown-item">로그아웃</a>
-                    <a href="${pageContext.request.contextPath}/password-reset.do" class="dropdown-item">비밀번호 초기화</a>
+                    <a href="${pageContext.request.contextPath}/member/loginPage.do" class="dropdown-item">로그인</a>
+                    <a href="${pageContext.request.contextPath}/member/enrollPage.do" class="dropdown-item">회원가입</a>
+                    <a href="${pageContext.request.contextPath}/member/logout.do" class="dropdown-item">로그아웃</a>
+                    <a href="${pageContext.request.contextPath}/member/pwdreset.do" class="dropdown-item">비밀번호 초기화</a>
                 </div>
             </div>
         </div>

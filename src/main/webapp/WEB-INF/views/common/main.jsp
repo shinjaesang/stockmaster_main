@@ -47,6 +47,10 @@
 
     <!-- Template Stylesheet -->
     <link href="${pageContext.request.contextPath}/resources/css/style.css" rel="stylesheet">
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
     <div class="container-fluid position-relative bg-white d-flex p-0">
@@ -274,8 +278,6 @@
     </div>
 
     <!-- JavaScript Libraries -->
-    <script src="${pageContext.request.contextPath}/resources/js/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/js/lib/chart/chart.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/js/lib/easing/easing.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/js/lib/waypoints/waypoints.min.js"></script>
