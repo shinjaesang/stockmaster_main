@@ -20,212 +20,358 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<title>first</title>
-<style type="text/css">
-div.lineA {
-	height: 100px;
-	border: 1px solid gray;
-	float: left;
-	position: relative;
-	left: 120px;
-	margin: 5px;
-	padding: 5px;
-}
-div#banner {
-	width: 500px;
-	padding: 0;
-}
-div#banner img {
-	width: 450px;
-	height: 80px;
-	padding: 0;
-	margin-top: 10px;
-	margin-left: 25px;
-}
-div#loginBox {
-	width: 280px;
-	font-size: 10pt;
-	text-align: left;
-	padding-left: 20px;
-}
-div#loginBox button {
-	width: 250px;
-	height: 35px;
-	background-color: navy;
-	color: white;
-	margin-top: 10px;
-	margin-bottom: 15px;
-	font-size: 14pt;
-	font-weight: bold;
-	cursor: pointer;  /* 손가락모양 : 클릭 가능한 버튼임을 표시함 */
-}
-div#loginBox a {
-	text-decoration: none;  /* 밑줄 없애기 */
-	color: navy;
-}
-</style>
-<%-- jQuery js 파일 로드 선언 --%>
-<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/jquery-3.7.1.min.js"></script>
-<script type="text/javascript">
-function movePage(){
-	//자바스크립트로 페이지 연결 이동 또는 서블릿 컨트롤러 연결 요청시에는
-	//location 내장객체의 href 속성을 사용함 : 상대경로, 절대경로 둘 다 사용 가능함
-	location.href = 'loginPage.do';  //서버측으로 로그인 페이지 내보내기 요청 보냄
-}
+    <meta charset="UTF-8">
+    <title>Stockmaster</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="재고관리 ERP 시스템" name="keywords">
+    <meta content="효율적인 재고 관리를 위한 Stockmaster ERP 시스템" name="description">
 
-//jquery document ready
-$(function(){
-	//최근 등록된 공지글 3개 (top-N) 전송받아서 출력 처리
-	$.ajax({
-		url: 'ntop3.do', /* 요청 url */
-		type: 'post',  /* 전송방식 */
-		dataType: 'json',    /* 컨트롤러로 부터 응답받을 데이터의 자료형임, 생략되면 string 임 */
-		success: function(data){
-			console.log('success : ' + data);  // [object Object]
-			
-			//object --> string
-			var str = JSON.stringify(data);
-			
-			//string --> json : parsing
-			var json = JSON.parse(str);
-			//Jackson 라이브러리로 json 리턴한 경우의 결과 확인
-			console.log(json.list);
-			
-			values = '';
-			for(var i in json.list){
-				 /* values += '<tr><td>' + json.list[i].no 
-						+ '</td><td>' + json.list[i].title
-						+ '</td><td>' + json.list[i].date 
-						+ '</td></tr>';  */	
-				values += '<tr><td>' + json.list[i].noticeNo 
-				+ '</td><td><a href="ndetail.do?no=' + json.list[i].noticeNo + '">' + json.list[i].noticeTitle
-				+ '</a></td><td>' + json.list[i].noticeDate 
-				+ '</td></tr>'; 
-			}  //for
-			
-			$('#newnotice').html($('#newnotice').html() + values);
-		},
-		error: function(jqXHR, textStatus, errorThrown){
-			console.log('error : ' + jqXHR + ', ' + textStatus + ', ' + errorThrown);
-		}
-	});  //ajax : ntop3.do
-		
-	//조회수 많은 인기 게시글 3개 (top-N) 전송받아서 출력 처리
-	$.ajax({
-		url: 'btop3.do',
-		type: 'post',
-		dataType: 'json',
-		success: function(data){
-			console.log('success : ' + data);  // [object Object]
-			
-			//object --> string
-			var str = JSON.stringify(data);
-			
-			//string --> json : parsing
-			var json = JSON.parse(str);
-			console.log('blist : ' + json.blist);
-			
-			values = '';
-			for(var i in json.blist){
-				/* values += '<tr><td>' + json.blist[i].bnum 
-						+ '</td><td>' + json.blist[i].btitle
-						+ '</td><td>' + json.blist[i].rcount 
-						+ '</td></tr>'; */
-				values += '<tr><td>' + json.blist[i].boardNum 
-				+ '</td><td><a href="bdetail.do?bnum=' + json.blist[i].boardNum  + '">' + json.blist[i].boardTitle
-				+ '</a></td><td>' + json.blist[i].boardReadCount 
-				+ '</td></tr>';
-			}  //for
-			
-			$('#toplist').html($('#toplist').html() + values);
-		},
-		error: function(jqXHR, textStatus, errorThrown){
-			console.log('error : ' + jqXHR + ', ' + textStatus + ', ' + errorThrown);
-		}
-	});  //ajax : ntop3.do
-});
-</script>
+    <!-- Favicon -->
+    <link href="${pageContext.request.contextPath}/resources/img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="${pageContext.request.contextPath}/resources/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/resources/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="${pageContext.request.contextPath}/resources/css/style.css" rel="stylesheet">
 </head>
 <body>
-<header>
-	<h1>spring legacy mvc project : first</h1>
-</header>
-<%-- 메뉴바 표시 --%>
-<%-- <%@ include file="menubar.jsp" %> --%>
-<c:import url="/WEB-INF/views/common/menubar.jsp" />
-<%-- 속성 url 은 브라우저에 표시되는 페이지 경로에 대한 url 임
-	기본 웰컴 페이지 url 이 http://localhost:8080/first 임
-	url 속성에 작성된 값을 기본 url 에 합쳐서 표현하면
-	전체 url 이 http://localhost:8080/first/WEB-INF/views/common/menubar.jsp 작성하거나
-	또는 기본 url 은 생략해도 되므로
-	/WEB-INF/views/common/menubar.jsp 만 표기해도 됨
- --%>
-<hr>
-<div id="banner" class="lineA">
-		<!-- html 태그에서 절대경로 표기는 이전 방식과 동일함, /context-root명/.....
-			스프링 프로젝트는 프로젝트명이 context-root 명임
-		 -->
-		<img src="/first/resources/images/photo2.jpg">
-	</div>
-	<%-- <% if(loginUser == null){ //로그인하지 않았을 때 %>  --%> <%-- scriptlet 태그라고 함 --%>
-	<%-- el 사용시에는 자바코드 사용할 수 없음. 대신 자바코드를 태그로 만들어서 제공하는 jstl 사용함 --%>
-	<c:if test="${ empty sessionScope.loginUser }">
-		<div id="loginBox" class="lineA"> 
-		first 사이트 방문을 환영합니다.<br>
-		<button onclick="movePage();">first 로그인</button><br>
-		<%-- 로그인 버튼을 클릭하면 자바스크립트 movePage() 함수가 실행되어서, 로그인 페이지가 나타나게 처리함 --%>
-		<a href="enrollPage.do">회원가입</a>
-		<%-- 회원가입 클릭하면 회원가입페이지가 나타나게 연결 설정함 --%>
-		</div>
-	</c:if>
-	<%-- <% }else{  //로그인 했을 때 %> --%>
-	<c:if test="${ !empty sessionScope.loginUser }">
-		<div id="loginBox" class="lineA">
-			<%-- <%= loginUser.getUserName() %> 님 &nbsp;  --%> 
-			<%-- EL 사용으로 바꾼다면, ${ 컨트롤러에서 setAttribute 할때 저장한 이름.멤버변수명 } --%>
-			${ loginUser.userName } 님 &nbsp;
-			<a href="logout.do">로그아웃</a> <br>
-			<!-- a 태그로 서블릿 컨트롤러를 요청하면, 전송방식은 get 임 -->
-			메일 0, 쪽지 0, 알림 0 <br>
-			<%--  a 태그로 서비스 요청 url 작성시, 값도 같이 전송하려면 쿼리스트링(QueryString)을 사용해야 함
-				url?전송이름=전송값&전송이름=전송값.......
-				?전송이름=전송값&전송이름=전송값....... : 쿼리스트링이라고 함
-				주의 : 쿼리스트링에는 공백 있으면 안 됨
-			 --%>
-			<a href="myinfo.do?userId=${ sessionScope.loginUser.userId }">내 정보 보기</a>
-		</div>
-	<%-- <% } %> --%>
-	</c:if>
-<hr style="clear:both">
+    <div class="container-fluid position-relative bg-white d-flex p-0">
+        <!-- Spinner Start -->
+        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <!-- Spinner End -->
 
-<%-- 최근 등록된 공지글 3개 출력 : ajax --%>
-<div style="float:left; border:1px solid navy; padding:5px; margin:5px; margin-left:150px;">
-	<h4>새로운 공지사항</h4>
-	<table id="newnotice" border="1" cellspacing="0" width="350">
-		<tr><th>번호</th><th>제목</th><th>날짜</th></tr>
-	</table>
-</div>
+        <!-- Sidebar Start -->
+        <jsp:include page="sidebar.jsp" />
+        <!-- Sidebar End -->
 
-<%-- 조회수 많은 인기게시글 3개 출력 : ajax --%>
-<div style="float:left; border:1px solid navy; padding:5px; margin:5px; margin-left:50px;">
-	<h4>인기 게시글</h4>
-	<table id="toplist" border="1" cellspacing="0" width="350">
-		<tr><th>번호</th><th>제목</th><th>조회수</th></tr>
-	</table>
-</div>
+        <!-- Content Start -->
+        <div class="content">
+            <!-- Navbar Start -->
+            <jsp:include page="navbar.jsp" />
+            <!-- Navbar End -->
 
+            <!-- Inventory Metrics Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                            <i class="fa fa-boxes fa-3x text-primary"></i>
+                            <div class="ms-3">
+                                <p class="mb-2">총 재고 수량</p>
+                                <h6 class="mb-0">12,345 개</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                            <i class="fa fa-exclamation-triangle fa-3x text-primary"></i>
+                            <div class="ms-3">
+                                <p class="mb-2">재고 부족 품목</p>
+                                <h6 class="mb-0">23 개</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                            <i class="fa fa-truck fa-3x text-primary"></i>
+                            <div class="ms-3">
+                                <p class="mb-2">오늘 입고</p>
+                                <h6 class="mb-0">1,234 개</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                            <i class="fa fa-dolly fa-3x text-primary"></i>
+                            <div class="ms-3">
+                                <p class="mb-2">오늘 출고</p>
+                                <h6 class="mb-0">1,234 개</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Inventory Metrics End -->
 
+            <!-- Inventory Charts Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    <div class="col-sm-12 col-xl-6">
+                        <div class="bg-light text-center rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="mb-0">재고 회전율</h6>
+                                <a href="">자세히 보기</a>
+                            </div>
+                            <canvas id="inventory-turnover"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-xl-6">
+                        <div class="bg-light text-center rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="mb-0">카테고리별 재고</h6>
+                                <a href="">자세히 보기</a>
+                            </div>
+                            <canvas id="category-inventory"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Inventory Charts End -->
 
-<hr style="clear:both">
-<%-- jsp 파일 안에 별도로 작성된 다른 jsp 파일을 포함할 수 있음
-	주의 : 상대경로만 사용할 수 있음
-	목적 : 모든 뷰페이지에 반복 사용(출력)되는 내용이 있다면, 별도의 jsp 로 작성해서
-		각 페이지에 포함시키면 됨 (중복 배제함)
- --%>
- <%-- <%@ include file="footer.jsp" %> --%>
- <c:import url="/WEB-INF/views/common/footer.jsp" />
- <%-- jstl 에서 절대경로는 /로 시작함, /가 webapp(content directory)를 의미함 --%>
+            <!-- Recent Transactions Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="bg-light text-center rounded p-4">
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                        <h6 class="mb-0">최근 재고 거래</h6>
+                        <a href="">모두 보기</a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table text-start align-middle table-bordered table-hover mb-0">
+                            <thead>
+                                <tr class="text-dark">
+                                    <th scope="col"><input class="form-check-input" type="checkbox"></th>
+                                    <th scope="col">날짜</th>
+                                    <th scope="col">거래 ID</th>
+                                    <th scope="col">제품명</th>
+                                    <th scope="col">수량</th>
+                                    <th scope="col">유형</th>
+                                    <th scope="col">작업</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input class="form-check-input" type="checkbox"></td>
+                                    <td>2025-04-21</td>
+                                    <td>TRN-001</td>
+                                    <td>전자제품 A</td>
+                                    <td>100</td>
+                                    <td>입고</td>
+                                    <td><a class="btn btn-sm btn-primary" href="">상세</a></td>
+                                </tr>
+                                <tr>
+                                    <td><input class="form-check-input" type="checkbox"></td>
+                                    <td>2025-04-21</td>
+                                    <td>TRN-002</td>
+                                    <td>의류 B</td>
+                                    <td>50</td>
+                                    <td>출고</td>
+                                    <td><a class="btn btn-sm btn-primary" href="">상세</a></td>
+                                </tr>
+                                <tr>
+                                    <td><input class="form-check-input" type="checkbox"></td>
+                                    <td>2025-04-21</td>
+                                    <td>TRN-003</td>
+                                    <td>식품 C</td>
+                                    <td>200</td>
+                                    <td>입고</td>
+                                    <td><a class="btn btn-sm btn-primary" href="">상세</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- Recent Transactions End -->
+
+            <!-- Widgets Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    <div class="col-sm-12 col-md-6 col-xl-4">
+                        <div class="h-100 bg-light rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <h6 class="mb-0">비상연락망</h6>
+                                <a href="">모두 보기</a>
+                            </div>
+                            <div class="d-flex align-items-center border-bottom py-3">
+                                <i class="fa fa-phone-alt text-primary me-3"></i>
+                                <div class="w-100">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-0">김관리</h6>
+                                        <small>창고 관리자</small>
+                                    </div>
+                                    <span>010-1234-5678</span>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center border-bottom py-3">
+                                <i class="fa fa-phone-alt text-primary me-3"></i>
+                                <div class="w-100">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-0">이책임</h6>
+                                        <small>재고 담당자</small>
+                                    </div>
+                                    <span>010-9876-5432</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-xl-4">
+                        <div class="h-100 bg-light rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="mb-0">공지사항</h6>
+                                <a href="notices.html">모두 보기</a>
+                            </div>
+                            <div class="d-flex align-items-center border-bottom py-3">
+                                <i class="fa fa-bullhorn text-primary me-3"></i>
+                                <div class="w-100">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-0">시스템 점검 안내</h6>
+                                        <small>2025-04-22</small>
+                                    </div>
+                                    <span>04월 25일 00:00~02:00 시스템 점검</span>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center border-bottom py-3">
+                                <i class="fa fa-bullhorn text-primary me-3"></i>
+                                <div class="w-100">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-0">재고 조사 안내</h6>
+                                        <small>2025-04-20</small>
+                                    </div>
+                                    <span>04월 30일 재고 조사 예정</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-xl-4">
+                        <div class="h-100 bg-light rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="mb-0">창고 현황</h6>
+                                <a href="">모두 보기</a>
+                            </div>
+                            <div id="warehouse-status"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Widgets End -->
+
+            <!-- Footer Start -->
+            <jsp:include page="footer.jsp" />
+            <!-- Footer End -->
+        </div>
+        <!-- Content End -->
+
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="${pageContext.request.contextPath}/resources/js/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/lib/chart/chart.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/lib/easing/easing.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/lib/waypoints/waypoints.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/lib/tempusdominus/js/moment.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script>
+        // Spinner
+        var spinner = function () {
+            setTimeout(function () {
+                if ($('#spinner').length > 0) {
+                    $('#spinner').removeClass('show');
+                }
+            }, 1);
+        };
+        spinner();
+
+        // Back to top button
+        $(window).scroll(function () {
+            if ($(this).scrollTop() > 300) {
+                $('.back-to-top').fadeIn('slow');
+            } else {
+                $('.back-to-top').fadeOut('slow');
+            }
+        });
+        $('.back-to-top').click(function () {
+            $('html, body').animate({scrollTop: 0}, 1500, 'easeInOutExpo');
+            return false;
+        });
+
+        // Sidebar Toggler
+        $('.sidebar-toggler').click(function () {
+            $('.sidebar, .content').toggleClass("open");
+            return false;
+        });
+    </script>
+
+    <!-- Chart Initialization -->
+    <script>
+        // 재고 회전율 차트
+        var ctx1 = document.getElementById('inventory-turnover').getContext('2d');
+        var inventoryTurnoverChart = new Chart(ctx1, {
+            type: 'line',
+            data: {
+                labels: ['1월', '2월', '3월', '4월', '5월', '6월'],
+                datasets: [{
+                    label: '재고 회전율',
+                    data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: 'rgba(0, 123, 255, 0.2)',
+                    borderColor: 'rgba(0, 123, 255, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // 카테고리별 재고 차트
+        var ctx2 = document.getElementById('category-inventory').getContext('2d');
+        var categoryInventoryChart = new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+                labels: ['전자제품', '의류', '식품', '가구', '문구'],
+                datasets: [{
+                    data: [300, 200, 150, 100, 50],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+    </script>
 </body>
 </html>
 
