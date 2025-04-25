@@ -15,8 +15,8 @@
             <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-shopping-cart me-2"></i>주문관리</a>
                 <div class="dropdown-menu bg-transparent border-0">
-                    <a href="${pageContext.request.contextPath}/orders/list.do" class="dropdown-item">주문 조회</a>
-                    <a href="${pageContext.request.contextPath}/orders/register.do" class="dropdown-item">주문 등록</a>
+                    <a href="${pageContext.request.contextPath}/order/list.do" class="dropdown-item">주문 조회</a>
+                    <a href="${pageContext.request.contextPath}/order/register.do" class="dropdown-item">주문 등록</a>
                 </div>
             </div>
             <div class="nav-item dropdown">
@@ -51,10 +51,10 @@
                 </div>
             </div>
             <div class="nav-item dropdown">
-                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-file-alt me-2"></i>결재관리</a>
+                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-file-alt me-2"></i>전자문서관리</a>
                 <div class="dropdown-menu bg-transparent border-0">
-                    <a href="${pageContext.request.contextPath}/approval/documents.do" class="dropdown-item">결재문서</a>
-                    <a href="${pageContext.request.contextPath}/approval/management.do" class="dropdown-item">결재문서관리</a>
+                    <a href="${pageContext.request.contextPath}/document/list.do" class="dropdown-item">전자문서조회</a>
+                    <a href="${pageContext.request.contextPath}/document/register.do" class="dropdown-item">전자문서등록</a>
                     <a href="${pageContext.request.contextPath}/tax-invoices.do" class="dropdown-item">세금계산서</a>
                     <a href="${pageContext.request.contextPath}/receipts.do" class="dropdown-item">영수증</a>
                 </div>
@@ -71,9 +71,8 @@
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-sign-in-alt me-2"></i>인증</a>
                 <div class="dropdown-menu bg-transparent border-0">
                     <a href="${pageContext.request.contextPath}/member/loginPage.do" class="dropdown-item">로그인</a>
-                    <a href="${pageContext.request.contextPath}/member/enrollPage.do" class="dropdown-item">회원가입</a>
-                    <a href="${pageContext.request.contextPath}/member/logout.do" class="dropdown-item">로그아웃</a>
-                    <a href="${pageContext.request.contextPath}/member/pwdreset.do" class="dropdown-item">비밀번호 초기화</a>
+                    <%-- <a href="${pageContext.request.contextPath}/logout.do" class="dropdown-item">로그아웃</a> --%>
+                    <a href="${pageContext.request.contextPath}/password-reset.do" class="dropdown-item">비밀번호 초기화</a>
                 </div>
             </div>
         </div>

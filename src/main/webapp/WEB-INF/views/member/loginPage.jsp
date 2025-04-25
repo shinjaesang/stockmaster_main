@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -60,18 +60,30 @@
         .login-container .bottom-link a:hover {
             text-decoration: underline;
         }
+        .error-message {
+            color: red;
+            text-align: center;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
     <div class="login-container">
         <h2>로그인</h2>
-        <form action="login.do" method="post">
+        <!-- 에러 메시지 표시 -->
+        <c:if test="${not empty message}">
+            <p class="error-message">${message}</p>
+        </c:if>
+        <form action="${pageContext.request.contextPath}/login.do" method="post">
             <input type="text" name="userId" placeholder="아이디" required>
             <input type="password" name="userPwd" placeholder="비밀번호" required>
+            <!-- CSRF 토큰 (Spring Security 사용 시 활성화) -->
+            <!-- <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/> -->
             <button type="submit">로그인</button>
         </form>
         <div class="bottom-link">
-            <p>계정이 없으신가요? <a href="enrollPage.do">회원가입</a></p>
+            <p>계정이 없으신가요? <a href="${pageContext.request.contextPath}/member/enrollPage.do">회원가입</a></p>
+            <p><a href="${pageContext.request.contextPath}/member/pwdreset.do">비밀번호를 잊으셨나요?</a></p>
         </div>
     </div>
 </body>
